@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sim;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 use function Laravel\Prompts\alert;
@@ -13,18 +14,11 @@ class SimController extends Controller
     {
 
         $data = Sim::all();
-
-        $sim = [
-            'status' => "success",
-            'sim' => $data,
-        ];
-
-        return response()->json($sim, 200);
+        return response()->json($data);
     }
 
     public function upload(Request $request)
     {
-        // return response("halo");
         $sim = new Sim;
         $sim->user_id = $request->uid;
         $sim->plan_id = $request->pid;
@@ -34,6 +28,7 @@ class SimController extends Controller
 
         return response()->json($sim);
     }
+
     public function edit(Request $request, $id)
     {
         $sim = Sim::find($id);
@@ -41,7 +36,7 @@ class SimController extends Controller
         $sim->plan_id = $request->pid;
         $sim->sim_number = $request->sim_number;
         $sim->activition_status = $request->status;
-        $sim->update();
+        $sim->save();
 
         return response()->json($sim);
     }
